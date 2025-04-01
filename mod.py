@@ -19,4 +19,6 @@ prediction.groupby(['month', 'day_of_week', 'hour'])['docks_available'].mean().r
 prediction = prediction.sort_values(by=['year', 'month', 'day', 'hour'])
 
 # Export the prediction dataframe to a new parquet file
-prediction.to_parquet('prediction_with_day_of_week.parquet', index=False)
+# prediction.to_parquet('prediction_with_day_of_week.parquet', index=False)
+
+print(prediction.columns)

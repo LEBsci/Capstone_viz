@@ -1,2 +1,4 @@
-prediction_with_day_week.parquet
+prediction_with_day_of_week.parquet
 final_df.parquet
+.venv
+*.png

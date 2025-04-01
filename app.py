@@ -10,6 +10,9 @@ def load_data():
 # Load the dataset
 prediction = load_data()
 
+# Create new column 'bikes_available'
+prediction['bikes_available'] = 1 - prediction['docks_available']
+
 # Static UI elements
 st.title("Animated Maps of Locations")
 col1, col2, col3 = st.columns(3)
@@ -40,7 +43,7 @@ fig = px.scatter_map(
     filtered_df,
     lat="lat",
     lon="lon",
-    color="docks_available",  # Color intensity based on docks_available
+    color="bikes_available",  # Color intensity based on docks_available
     color_continuous_scale="Turbo",  # Color scale
     range_color=(0, 1),  # Keep the color scale between 0 and 1
     size_max=20,  # Maximum size of the points
@@ -48,6 +51,8 @@ fig = px.scatter_map(
     animation_frame="hour",  # Animate by hour
     title=f"Hourly Changes in Locations for {year}-{month}-{day}",
     map_style="carto-positron",  # Use OpenStreetMap
+    hover_name="name",  # Show station name on hover
+    hover_data=["station_id"],  # Show bikes and docks available on hover
 
 )
 
@@ -61,7 +66,7 @@ fig.update_layout(
         x=0.5,  # Center the legend horizontally
         xanchor="center",  # Anchor the legend at the center
         y=1.0,  # Position the legend below the map
-        title="Docks Available",  # Add a title to the color scale
+        title="Bikes Available",  # Add a title to the color scale
     )
 )
 
@@ -74,6 +79,10 @@ def load_prediction_with_day_of_week():
     return pd.read_parquet('prediction_with_day_of_week.parquet')
 
 day_prediction = load_prediction_with_day_of_week()
+
+# Create new column 'bikes_available'
+day_prediction['bikes_available'] = 1 - day_prediction['docks_available']
+
 # Filter the DataFrame based on the selected year, month, and day of the week
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -102,7 +111,7 @@ fig = px.scatter_map(
     filtered_day_df,
     lat="lat",
     lon="lon",
-    color="docks_available",  # Color intensity based on docks_available
+    color="bikes_available",  # Color intensity based on docks_available
     color_continuous_scale="Turbo",  # Color scale
     range_color=(0, 1),  # Keep the color scale between 0 and 1
     size_max=20,  # Maximum size of the points
@@ -110,6 +119,9 @@ fig = px.scatter_map(
     animation_frame="hour",  # Animate by hour
     title=f"Hourly Changes in Locations for {year}-{month} on {day_of_week}",
     map_style="carto-positron",  # Use OpenStreetMap
+    hover_name="name",  # Show station name on hover
+    # Include hover data for additional information
+    hover_data=["station_id"],  # Show station_id on hover
 
 )
 
@@ -123,7 +135,7 @@ fig.update_layout(
         x=0.5,  # Center the legend horizontally
         xanchor="center",  # Anchor the legend at the center
         y=1.0,  # Position the legend below the map
-        title="Docks Available",  # Add a title to the color scale
+        title="Bikes Available",  # Add a title to the color scale
     )
 )
 # Display the animated map in Streamlit
